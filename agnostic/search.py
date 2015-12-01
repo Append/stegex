@@ -31,9 +31,9 @@ def cut(buff, minus_s):
 def main():
 	#simple arg parser
 	parser = argparse.ArgumentParser()
-	parser.add_argument("secret", type=str,help="the file you are attempting to hid")
-	parser.add_argument("output", type=str,help="where you are ouputing the key")
-	parser.add_argument("payload", type=str,help="the payload")
+	parser.add_argument("secret", type=str,help="the file you are attempting to hide")
+	parser.add_argument("output", type=str,help="where you are outputing the key")
+	parser.add_argument("payload", type=str,help="the payload you are using to hide it against, to unhide file, you must have an exact copy of this file")
 	parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
 	args = parser.parse_args()
 	
