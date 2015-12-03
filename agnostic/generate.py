@@ -1,5 +1,7 @@
 import argparse
 
+#credit for this "bs_from_file" method to http://stackoverflow.com/questions/1035340/reading-binary-file-in-python-and-looping-over-each-byte
+#by skurmedel
 #this method reads in the file in binary to a buffer passed back to the main func, used for improved processing speed by buffering the object
 def bs_from_file(filename, chunksize=8192):
     with open(filename, "rb") as f:
