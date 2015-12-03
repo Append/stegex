@@ -37,27 +37,23 @@ def main():
 	for section in pe.sections:
 		tup = ()
 		print (section.Name, hex(section.VirtualAddress), hex(section.Misc_VirtualSize), section.SizeOfRawData )
-		tup = (section.Name, section.VirtualAddress, section.Misc_VirtualSize, section.SizeOfRawData)
+		tup = (section.Name, section.PointerToRawData, section.Misc_VirtualSize, section.SizeOfRawData)
 		sectionGaps.append(tup)
 
 	for x in range(len(sectionGaps)):
 		#where to start hiding
-		if x == (len(sectionGaps) - 1):
-			break
-		if min(sectionGaps[x][2],sectionGaps[x][3]) == 0:
-			continue
-		else:
-			startADDR = max(sectionGaps[x][2],sectionGaps[x][3]) + sectionGaps[x][1]
+		startADDR = sectionGaps[x][1] + sectionGaps[x][2]
 		#how much can be hid
 		#print hex(startADDR)
-		availSpace = int(sectionGaps[x+1][1]) - int(startADDR)
+		availSpace = int(sectionGaps[x][3]) - int(sectionGaps[x][2])
 
 		#tuple used for hiding
 		hideOffset = (startADDR, availSpace)
 
 		#print hideOffset
-		hide(hideOffset,args.output)
-		break
+		if availSpace > 0:
+			hide(hideOffset,args.output)
+		
 	#pe.write(filename=args.output)
 	#print sectionGaps
 
