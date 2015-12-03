@@ -2,13 +2,26 @@ import pefile
 import argparse
 import shutil
 import os
+import base64
 
 #encode/encrypt the stego secret data before hiding
 def encode(secret):
+	with open(secret, 'rb') as fe:
+		encoded = base64.b64encode(fe.read())
+		fe.close()
+	with open(secret, 'wb') as fe:
+		fe.write(encoded)
+		fe.close()
 	return None
 
 #decode/decrypt the stego secret data after extracting
 def decode(secret):
+	with open(secret, 'rb') as fd:
+		decoded = base64.b64decode(fd.read())
+		fd.close()
+	with open(secret, 'wb') as fd:
+		fd.write(decoded)
+		fd.close()
 	return None
 
 #method for inseting data using a tuple consisting of size of data and location in file to start
@@ -85,6 +98,7 @@ def main():
 	#setup some files for the hide method
 	if args.hide:
 		shutil.copyfile(args.payload, 'a'+args.payload)
+		encode(args.payload)
 		shutil.copyfile(args.pePath, args.output)
 
 	#iterate through sections to pull header data from them
@@ -105,16 +119,20 @@ def main():
 		if availSpace > 0:
 			#run the hiding algorithm
 			if args.hide:
-				print "\n[*]HIDING %d BYTES OF DATA IN %s[*]"%(availSpace, section.Name)
+				print "\n[*]HIDING %d BYTES OF DATA IN %s AT %x[*]"%(availSpace, section.Name, startADDR)
 				hide(hideOffset,args.output, args.payload)
 
 			#run th extraction algorithm
 			elif args.extract:
-				print "\n[*]EXTRACTING %d BYTES OF DATA FROM %s[*]"%(availSpace, section.Name)
+				print "\n[*]EXTRACTING %d BYTES OF DATA FROM %s AT %x[*]"%(availSpace, section.Name, startADDR)
 				find(hideOffset,args.output,args.pePath)
 
 			#add the size of this slack space to the overall available possible hiding size
 			size += availSpace
+
+	#decode the encoded output
+	if args.extract:
+		decode(args.output)
 
 	#if the showSize flag is set, output the area available
 	if args.showSize:
