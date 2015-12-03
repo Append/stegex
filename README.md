@@ -1,4 +1,4 @@
 # stegex
-stegex is a class project that deals with steganography within executable files
-Each folder will host a different file format<br>
-Each subfolder will contain methods within that media<br>
+<br>stegex is a class project that deals with steganography within executable files</br>
+<br>Each folder will host a different file format</br>
+<br>Each subfolder will contain methods within that media</br>
